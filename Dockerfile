@@ -22,21 +22,16 @@ COPY . .
 RUN npm run build
 
 # Runner
-FROM base AS runner
+FROM bal_salespro:latest AS runner
 
-ARG USER_HOME=/home/app
+ARG USER_HOME=/home/ballerina
 ARG USER_ID=10001
 ARG USER_GROUP_ID=10001
+ENV RUNTIME_HOME=/home/ballerina
 
 WORKDIR ${USER_HOME}
 
-COPY --from=builder --chown=${USER_ID}:${USER_GROUP_ID} /home/app/dist ./dist
-COPY --from=builder --chown=${USER_ID}:${USER_GROUP_ID} /home/app/node_modules ./node_modules
-COPY --from=builder --chown=${USER_ID}:${USER_GROUP_ID} /home/app/public /home/app/public
+COPY --from=builder --chown=${USER_ID}:${USER_GROUP_ID} /home/app/public /home/ballerina/public
 
 USER 10001
-EXPOSE 3000
-
-ENV NODE_ENV=production
-
-CMD ["node", "dist/index.js"]
+EXPOSE 9090

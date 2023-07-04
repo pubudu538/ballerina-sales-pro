@@ -3,6 +3,7 @@ import ballerina/file;
 import ballerina/mime;
 import ballerina/log;
 import ballerina/regex;
+import ballerina/os;
 
 type User record {
     string user;
@@ -41,7 +42,14 @@ service / on new http:Listener(9090) {
             requestedFilePath = "index.html";
         }
 
-        string path = check file:joinPath("../public/", requestedFilePath);
+        string homePath = os:getEnv("RUNTIME_HOME");
+        string path = "";
+        if homePath is "" {
+            path = check file:joinPath("../public/", requestedFilePath);
+        } else {
+            path = check file:joinPath(homePath, "/public/", requestedFilePath);
+        }
+
         res = getFileAsResponse(path);
 
         error? clientResponse = caller->respond(res);
