@@ -22,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # Runner
-FROM bal_salespro:latest AS runner
+FROM pubudu/bal_salespro:v1 AS runner
 
 ARG USER_HOME=/home/ballerina
 ARG USER_ID=10001
